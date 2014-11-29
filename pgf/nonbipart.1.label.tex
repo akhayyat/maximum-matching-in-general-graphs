@@ -1,0 +1,21 @@
+\begin{tikzpicture}[>=stealth, node distance=1.4cm, on grid]
+  \tikzstyle{lbl}=[scale=.7, anchor=south]
+
+  \node[node, double] (1) {$1$};
+  \node[node, right=of 1] (2) {$2$};
+  \node[node, very thick, fill=red!15, right=of 2] (3) {$3$};
+  \draw (3) ++(30:1.4cm) node[node] (4) {$4$};
+  \node[node, below=of 4] (5) {$5$};
+  \node[node, right=of 4] (6) {$6$};
+
+  \node[lbl] at (1.north) {$O$};
+  \node[lbl] at (2.north) {$I$};
+  \node[lbl,red] at (3.north) {$O$};
+  \node[lbl] at (4.north) {$I$};
+  \node[lbl,red,anchor=north] at (5.south) {$O$};
+
+  \draw (1) -- (2) (4) -- (6);
+  \draw[very thick] (3) -- (4) (3) -- (5);
+  \draw[match] (2) -- (3);
+  \draw[match, very thick] (4) -- (5);
+\end{tikzpicture}

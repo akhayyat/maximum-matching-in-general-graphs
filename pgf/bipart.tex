@@ -1,0 +1,19 @@
+\begin{tikzpicture}[node distance=1.2cm, on grid]
+  \tikzstyle{node}+=[scale=.8]
+  \tikzstyle{node2}=[node, rectangle, fill=red!15]
+
+  \node[node] (1) {$1$};
+  \node[node2, right=of 1] (a) {$A$};
+  \node[node2, below=.5cm] at (a) (c) {$C$};
+  \node[node2, below=.5cm] at (c) (d) {$D$};
+  \node[node2, below=.5cm] at (d) (e) {$E$};
+  \node[node2, below=.5cm] at (e) (b) {$B$};
+  \node[node, left=of d] (4) {$4$};
+  \node[node, left=of b] (3) {$3$};
+  \node[node, above=.5cm] at (3) (2) {$2$};
+  \node[node, below=.5cm] at (3) (5) {$5$};
+
+  \draw (1) -- (a) -- (2) -- (b) -- (3);
+  \draw (a) -- (4) (b) -- (5);
+  \draw (c) -- (4) -- (d) (4) -- (e);
+\end{tikzpicture}

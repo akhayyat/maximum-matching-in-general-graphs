@@ -1,0 +1,17 @@
+\begin{tikzpicture}[>=stealth, on grid, node distance=1.4cm]
+  \node[node]                    (v1) {$v_1$};
+  \node[node, right=of v1]       (v2) {$v_2$};
+  \node[node, right=of v2]       (v3) {$v_3$};
+  \draw (v3) ++(240:1.4cm) node[node]  (v4) {$v_4$};
+  \node[node, left=of v4]        (v5) {$v_5$};
+  \node[node, left=of v5]        (v6) {$v_6$};
+
+  \draw[match] (v1) -- (v2) (v4) -- (v5);
+  \draw (v2) -- (v3) -- (v4) (v5) -- (v6) -- (v1) -- (v5) --
+  (v2) -- (v4);
+
+  \draw[path] (v1.20) -- (v2.160);
+  \draw[path] (v2.-40) -- (v4.100);
+  \draw[path] (v4.200) -- (v5.-20);
+  \draw[path] (v5.200) -- (v6.-20);
+\end{tikzpicture}

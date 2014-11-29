@@ -1,0 +1,22 @@
+\begin{tikzpicture}[node distance=1.2cm, on grid]
+  \tikzstyle{node}+=[scale=.8]
+  \tikzstyle{node2}=[node, rectangle, fill=red!15]
+
+  \node[node] (1) {$1$};
+  \node[node, below=of 1] (2) {$2$};
+  \node[node, below=of 2] (3) {$3$};
+
+  \node[node2, right=of 2, yshift=.7cm] (a) {$A$};
+  \node[node2, below=of a] (b) {$B$};
+
+  \node[node, right=of a] (4) {$4$};
+  \node[node, right=of b] (5) {$5$};
+
+  \node[node2, right=of 4] (d) {$D$};
+  \node[node2, above=.5cm] at (d) (c) {$C$};
+  \node[node2, below=.5cm] at (d) (e) {$E$};
+
+  \draw (1) -- (a) -- (2) -- (b) -- (3);
+  \draw (a) -- (4) (b) -- (5);
+  \draw (c) -- (4) -- (d) (4) -- (e);
+\end{tikzpicture}

@@ -1,0 +1,717 @@
+\documentclass[pdftex]{beamer}
+%\usepackage{graphicx}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage{pifont}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage[figure,noend]{algorithm2e}
+%\usepackage{colortbl}
+%\usepackage{enumerate}
+%\usepackage{esvect}
+%\usepackage[normalem]{ulem}
+%\usepackage[absolute,overlay]{textpos}
+%\usepackage[squaren,textstyle]{SIunits}
+
+\colorlet{redbg}{red!30}
+\colorlet{lightpink}{red!15}
+\colorlet{lightpurple}{blue!15}
+\colorlet{mypurple}{blue!70!black!70}
+%\definecolor{purple}{rgb}{.26,.26,.89}
+%\definecolor{midpurple}{rgb}{.72,.72,.898}
+%\definecolor{lightpurple}{rgb}{.84,.84,.94}
+%\definecolor{pink}{rgb}{1,.15,.23}
+%\definecolor{lightpink}{rgb}{1,.82,.85}
+%\definecolor{mygreen}{rgb}{.84,.94,.89}
+%\definecolor{myyellow}{rgb}{1,1,.647}
+
+%\graphicspath{{plots/}}
+
+\usetikzlibrary{patterns,snakes,shapes,backgrounds,positioning}
+\tikzstyle{node}=[draw,circle,fill=lightpurple,inner sep=1pt,minimum
+size=.6cm]
+\tikzstyle{node2}=[node,rectangle,fill=red!15]
+\tikzstyle{path}=[->, blue!50, thick]
+\tikzstyle{match}=[decorate,decoration={snake,amplitude=.4mm,segment
+  length=1.5mm}]
+
+\usetheme{Darmstadt}
+\usecolortheme{seahorse}
+\setbeamerfont{title}{family=\rmfamily,shape=\sc}
+\usefonttheme{professionalfonts}
+
+\newcommand{\subbullet}{\color{mypurple}\scriptsize\ding{235}}
+\newcommand{\var}[1]{\text{\emph{#1}}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\renewcommand{\arraystretch}{1.3}
+
+%\setbeamercovered{transparent=20}
+\setbeamertemplate{footline}
+{
+  \begin{beamercolorbox}{section in head/foot}
+    \vskip2pt{
+      \makebox[\paperwidth]{
+        \makebox[.3\paperwidth][l]{\hskip2ex\insertshortinstitute $\;\bullet$ \insertshortdate }
+        % \hfill
+        \makebox[.4\paperwidth][c]{\insertshortauthor}
+        % \hfill
+        \makebox[.3\paperwidth][r]{\insertshorttitle $\;\bullet$ \makebox[2ex]{\insertframenumber}\hskip2ex}
+      }
+    }
+    \vskip2pt
+  \end{beamercolorbox}
+}
+
+\title{Maximum Matching in General Graphs}
+\author[Ahmad Khayyat]{Ahmad Khayyat\\[3pt]
+{\footnotesize
+Department of Electrical \& Computer Engineering\\
+\texttt{ahmad.khayyat@ece.queensu.ca}}}
+\institute[ECE @ Queen's]{%
+Course Project\\
+CISC 879 --- Algorithms and Applications\\
+Queen's University}
+\subject{Algorithms}
+\date[Fall 2008]{November 19, 2008}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Outline}
+    \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/show/hide]
+  \end{frame}
+}
+
+% \AtBeginSubsection[]
+% {
+%   \begin{frame}
+%     \frametitle{Outline}
+%     \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded/hide]
+%   \end{frame}
+% }
+
+\part{main}
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents[part=1,hideallsubsections,sectionstyle=show]
+\end{frame}
+
+% =============================================================================
+\section{Introduction}
+
+\subsection{Terminology}
+
+\begin{frame} \frametitle{Maximum Matching}
+  \begin{itemize}
+  \item $\blue{G = (V, E)}$ is a finite undirected graph: $\blue{n = |V|}, \blue{m = |E|}$.
+  \item A matching $\blue{M}$ in $G$, $\blue{(G, M)}$, is a subset of
+    its edges such that no two meet the same vertex.
+  \item $M$ is a maximum matching if no other matching in $G$ contains
+    more edges than $M$.
+  \item A maximum matching is not necessarily unique.
+  \item Given $(G, M)$, a vertex is \blue{exposed} if it meets no edge in $M$.
+  \end{itemize}
+  \begin{center}
+    \input{pgf/matching.tex}
+  \end{center}
+\end{frame}
+
+\begin{frame} \frametitle{Augmenting Paths}
+  \begin{itemize}
+  \item An \blue{alternating path} in $(G, M)$ is a simple path whose
+    edges are alternately in $M$ and not in $M$.
+  \item An \blue{augmenting path} is an alternating path whose ends
+    are distinct exposed vertices.
+  \end{itemize}
+  \begin{center}
+    \hfill
+    \input{pgf/alter.tex}%
+    \hfill
+    \input{pgf/augment.tex}%
+    \hfill~
+  \end{center}
+\end{frame}
+
+\subsection{Berge's Theorem}
+
+\begin{frame} \frametitle{Berge's Theorem}
+  \begin{block}{Berge's Theorem (1957)}
+    A matched graph $(G, M)$ has an augmenting path if and only if $M$
+    is not maximum.
+  \end{block}
+  \begin{columns}[T]
+    \begin{column}{.5\textwidth}
+      \centering \input{pgf/augment.tex}\\[4ex]
+    \end{column}
+    \begin{column}{.5\textwidth}
+      \input{pgf/bigger.match.tex}\\
+      \only<1>{\hfill Unique? \hfill\hfill~}
+      % \only<2>{\input{pgf/another.big.match.tex}}
+    \end{column}
+  \end{columns}
+  \vspace{2ex}
+  \textbf{An Exponential Algorithm:}\\
+  Exhaustively search for an augmenting path starting from an exposed
+  vertex.
+\end{frame}
+
+% =============================================================================
+
+\subsection{Bipartite Matching}
+
+\begin{frame} \frametitle{Bipartite Graphs}
+  \begin{itemize}
+  \item A \blue{bipartite graph} $G=(A, B, E)$ is a graph whose vertices can be
+    divided into two disjoint sets $A$ and $B$ such that every
+    edge connects a vertex in $A$ to one in $B$.
+  \item Equivalently, it is a graph with no odd cycles.
+  \end{itemize}
+  \begin{center}
+    \begin{columns}
+      \begin{column}{.5\textwidth}
+        \centering \input{pgf/bipart.tex}
+      \end{column}
+      \begin{column}{.5\textwidth}
+        \input{pgf/bipart2.tex}
+      \end{column}
+    \end{columns}
+  \end{center}
+\end{frame}
+
+\begin{frame} \frametitle{Bipartite Graph Maximum Matching}
+  \vspace{-1ex}
+  \begin{columns}[b]
+    \begin{column}{.15\textwidth}
+      \begin{tikzpicture}
+        \draw[decorate, decoration=brace] (0,0) -- node[left=1ex] {$O(nm)$} (0,3.2);
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{.9\textwidth}
+      \begin{algorithmic}
+        \FORALL {$v \in A$, $v$ is exposed}
+        \STATE Search for simple alternating paths starting at $v$
+        \IF {path $P$ ends at an exposed vertex $u \in B$}
+        \STATE $P$ is an augmenting path
+        \COMMENT {Update $M$}
+        \ENDIF
+        \ENDFOR
+        \STATE Current $M$ is maximum \COMMENT {No more augmenting
+          paths}
+      \end{algorithmic}
+    \end{column}
+  \end{columns}
+  % \begin{itemize}
+  % \item Can be improved to $O(m \sqrt{n})$.
+  % \end{itemize}
+  \vspace{1ex}
+  \begin{columns}
+    \begin{column}{.5\textwidth}
+      \centering \input{pgf/bipart.match.tex}
+    \end{column}
+    \begin{column}{.5\textwidth}
+      \uncover<2>{
+        \centering \input{pgf/bipart.match.2.tex}}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame} \frametitle{Non-Bipartite Matching}
+  \textbf{Problem:} Odd cycles \ldots
+  \begin{center}
+    \input{pgf/nonbipart.1.tex}\\
+    \vspace{1cm}
+    \input{pgf/nonbipart.2.tex}
+  \end{center}
+\end{frame}
+
+% =============================================================================
+
+%\section{Edmonds' Algorithm}
+
+\section{Paths, Trees and Flowers}
+
+\subsection{Blossoms}
+
+\begin{frame} \frametitle{Blossoms}
+  \begin{block}{Blossoms}
+    A blossom $B$ in $(G, M)$ is an odd cycle with a unique exposed
+    vertex (the base) in $M \cap B$.
+  \end{block}
+  \begin{center}
+    \input{pgf/nonbipart.1.blossom.tex}\\
+    \vspace{.5cm}
+    \input{pgf/nonbipart.2.blossom.tex}
+  \end{center}
+\end{frame}
+
+\begin{frame} \frametitle{Edmonds' Blossoms Lemma}
+  \begin{block}{Blossoms Lemma}
+    Let $G'$ and $M'$ be obtained by contracting a blossom $B$ in $(G,
+    M)$ to a single vertex.\\
+    The matching $M$ of $G$ is maximum iff $M'$ is maximum in $G'$.
+  \end{block}
+  \begin{center}
+    \input{pgf/nonbipart.1.blossom.tex}\\
+    \vspace{.5cm}
+    \input{pgf/nonbipart.1.b.tex}
+  \end{center}
+\end{frame}
+
+\begin{frame} \frametitle{Detecting Blossoms}
+  \begin{itemize}
+  \item Performing the alternating path search of the bipartite
+    matching algorithm (starting from an exposed vertex):
+    \begin{itemize}
+    \item[\subbullet] Label vertices at even distance from the root as
+      ``\blue{outer}'';
+    \item[\subbullet] Label vertices at odd distance from the root as
+      ``\blue{inner}''.
+    \end{itemize}
+  \item If two outer vertices are found adjacent, we have a blossom.
+  \end{itemize}
+  \begin{center}
+    \input{pgf/nonbipart.1.label.tex}
+  \end{center}
+\end{frame}
+
+\subsection{The Algorithm}
+
+\begin{frame} \frametitle{Edmonds' Algorithm (1965)}
+  \vspace{-2ex}
+  \begin{columns}[T]
+    \begin{column}{.1\textwidth}
+      \begin{tikzpicture}[every node/.style={scale=.8}]
+        \node at (0,1.2cm) {};
+        \node[blue] (b) {$O(n^2)$};
+        \draw[decorate,decoration=brace] (b.south west) -- node[left=.8ex]
+        {$O(n^3)$} ++(0,.8cm);
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{.9\textwidth}
+      \begin{algorithmic}
+        \FORALL {$v \in V$, $v$ is exposed}
+        \STATE Search for simple alternating paths starting at $v$
+        \STATE \hspace{2ex} \blue{Shrink any found blossoms}
+        \IF {path $P$ ends at an exposed vertex}
+        \STATE $P$ is an augmenting path
+        \COMMENT {Update $M$}
+        \ELSIF {\blue{no augmenting paths found}}
+        \STATE \blue{Ignore $v$ in future searches}
+        \ENDIF
+        \ENDFOR
+        \STATE Current $M$ is maximum \COMMENT {No more augmenting
+          paths}
+      \end{algorithmic}
+    \end{column}
+  \end{columns}
+  \vspace{.5cm}
+
+  \begin{columns}
+    \begin{column}{.4\textwidth}
+      \begin{block}{}
+        \centering \textbf{Complexity:} $O(n^4)$
+      \end{block}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame} \frametitle{Example}
+  $\textcolor<8>{black!30}{|M| = 4}$ \hfill \uncover<8>{\blue{$|M|=5$}}
+  \begin{center}
+    \input{pgf/edmonds.ex.tex}
+  \end{center}
+  \uncover<3->{$B_1 = 5, 6, 7$}\\
+  \uncover<5->{$B_2 = B_1, 8, 9 = 5, 6, 7, 8, 9$}
+\end{frame}
+
+% =============================================================================
+
+%\section[Gabow's Implementation]{Efficient Implementation of Edmonds' Algorithm}
+\section[Efficient Implementation]{Efficient Implementation of Edmonds'
+  Algorithm}
+
+\subsection{Data Structures}
+
+\begin{frame} \frametitle{Three Arrays}
+  \vspace{-2ex}
+  \begin{itemize}
+  \item $\blue{u}$ is an exposed vertex.
+  \item A vertex $\blue{v}$ is \blue{outer} if there is a path $P(\blue{v}) = (\blue{v},
+    v_1, \ldots, \blue{u})$, where $vv_1 \in M$.
+  \end{itemize}
+  \begin{enumerate}
+  \item \emph{\textrm{MATE:}} Specifies a matching. An entry for each vertex:
+    \begin{itemize}
+    \item[\subbullet] $vw \in M \Rightarrow \mathit{MATE}(v) = w$ and $\mathit{MATE}(w) = v$.
+    \end{itemize}
+  \item \emph{\textrm{LABEL:}} Provides a type and a value:%
+    \vspace{-2ex}
+    \[%
+    \renewcommand{\arraycolsep}{.5ex}
+    \begin{array}{rll}
+      & \mathit{LABEL}(v) \ge 0 & \rightarrow \; v \text{ is outer} \\
+      & \mathit{LABEL}(\blue{u}) & \rightarrow \; \text{\blue{start} label, } P(u)
+      = (u)\\
+      1 \le & \mathit{LABEL}(v) \le n & \rightarrow \;
+      \text{\blue{vertex} label}\\
+      n+1 \le & \mathit{LABEL}(v) \le n+2m
+      & \rightarrow \; \text{\blue{edge} label}
+    \end{array}
+    \]
+  \item $\mathit{START}(v)$ = the first non-outer vertex
+      in $P(v)$.
+  \end{enumerate}
+\end{frame}
+
+\subsection{The Algorithm}
+
+\begin{frame} \frametitle{Gabow's Algorithm (1976)}
+  \vspace{-2ex}
+  \begin{columns}
+    \begin{column}{.05\textwidth}
+      \uncover<2>{
+      \begin{tikzpicture}[every node/.style={inner sep=2.5pt}]
+        \node at (-0.73cm,0) (for) {$O(n)$};
+
+        \node[blue] at (0,-1.4cm) (if) {$O(1)$};
+        \node at (0.73,-1.9cm) (aug) {$O(n)$};
+
+        \node[blue] at (0,-2.35cm) (else1) {$O(n)$};
+        \node at (0.73,-2.85cm) (edge) {$O(n)$};
+
+        \node[blue] at (0,-3.3cm) (else2) {$O(n)$};
+        \node at (0.73,-3.8cm) (vertex) {$O(1)$};
+
+        \node at (-.8cm,-5.1cm) {};
+
+        \draw (if) |- (aug);
+        \draw (else1) |- (edge);
+        \draw (else2) |- (vertex);
+        \draw (for) |- (if);
+        \draw (for |- if) ++(0,-.1cm) |- (else1);
+        \draw (for |- else1) ++(0,-.1cm) |- (else2);
+      \end{tikzpicture}}
+    \end{column}
+    \begin{column}{.85\textwidth}
+      \begin{algorithmic}
+        \FORALL {$u \in V, u$ is exposed}
+        \color<2>{blue}\WHILE {\color{black}$\exists$ an edge $xy$, $x$ is outer AND\\
+          \hspace{.9cm} no augmenting path found}
+        \IF {$y$ is exposed, $y \ne u$}
+        \STATE $(y, x, \ldots, u)$ is an augmenting path
+        \ELSIF {$y$ is outer}
+        \STATE Assign edge labels to $P(x)$ and
+        $P(y)$
+        \ELSIF {$\mathit{MATE}(y)$ is non-outer}
+        \STATE Assign a vertex label to $\mathit{MATE}(y)$
+        \ENDIF
+        \ENDWHILE
+        \ENDFOR
+      \end{algorithmic}
+    \end{column}
+  \end{columns}
+
+  \begin{columns}
+    \begin{column}{.4\textwidth}
+      \uncover<2>{
+      \begin{block}{}
+        \centering \textbf{Complexity:} $O(n^3)$
+      \end{block}}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+\subsection{Performance}
+
+\begin{frame} \frametitle{Experimental Performance}
+  Using an implementation in Algol W on the IBM 360/165
+  \begin{itemize}
+  \item Worst-case graphs:
+    \begin{itemize}
+    \item[\subbullet] Efficient Implementation: run times proportional to $n^{2.8}$.
+    \item[\subbullet] Edmond: run times proportional to $n^{3.5}$.
+    \end{itemize}
+
+  \item Random graphs: times one order of magnitude faster than
+    worst-case graphs.
+  \item Space used is $5n + 4m$.
+  \end{itemize}
+\end{frame}
+
+% =============================================================================
+
+%\section[Blum's Algorithm]{Reachability Problem Approach}
+\section[Reachability Approach]{Reachability Problem Approach}
+
+\subsection{Reachability and Graphs}
+
+\begin{frame} \frametitle{The Reachability Problem in Bipartite
+    Graphs}
+  \vspace{-1.5ex}
+  \begin{itemize}
+  \item Construction:
+    \vspace{-2ex}
+    \[
+    \begin{array} {c!{+}c!{\rightarrow}c}
+      \text{Bipartite graph} & \text{Matching} & \text{Directed graph}\\[-4pt]
+      G = (A, B, E) & M & G' = (V', E')
+    \end{array}
+    \]
+    \vspace{-3ex}
+    \begin{itemize}
+    \item[\subbullet] $V' = V \cup \{\blue{s}, \blue{t}\}$
+    \item[\subbullet] $\forall \; \blue{xy \in M}, x \in A, y \in B
+      \rightarrow \blue{(x,y)} \in E'$ \qquad {\scriptsize $e \in M
+        \Rightarrow e: A \rightarrow B$}
+    \item[\subbullet] $\forall \; \blue{xy \notin M}, x \in A, y \in B
+      \rightarrow \blue{(y,x)} \in E'$ \qquad {\scriptsize $e \notin M
+        \Rightarrow e: B \rightarrow A$}
+    \item[\subbullet] $\forall \; b \in B, \blue{b}$ \blue{is exposed}
+      $\rightarrow$ add $\blue{(s,b)}$ to $E'$
+    \item[\subbullet] $\forall \; a \in A, \blue{a}$ \blue{is exposed}
+      $\rightarrow$ add $\blue{(a,t)}$ to $E'$
+    \end{itemize}
+
+    \begin{center}
+      \input{pgf/bipart.reach.tex}
+    \end{center}
+
+  \item<2> An augmenting path in $G$ $\Leftrightarrow$ A simple path
+    from $s$ to $t$ in $G'$.
+  \end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{The Reachability Problem in General Graphs}
+  \framesubtitle{Construction}
+  \vspace{-1ex}
+  \begin{itemize}
+  \item For each $v \in V$, we introduce two nodes $v_A$ and $v_B$
+    \[
+    V' = \{ v_A, v_B | v \in V\} \cup \{s, t\} \qquad s, t \notin V,
+    s \ne t
+    \]
+  \item $e \in M \Rightarrow e: \blue{A} \rightarrow \alert{B}, \qquad e \notin M
+    \Rightarrow e: \alert{B} \rightarrow \blue{A}$
+    \[
+    \begin{split}
+      E' = {} & \hspace{2.5ex} \{ (\blue{x_A}, \alert{y_B}), (\blue{y_A}, \alert{x_B}) \, | \, (x,y) \blue{{}\in{}} M \}\\
+              & \cup \{ (\alert{x_B}, \blue{y_A}), (\alert{y_B}, \blue{x_A}) \, | \, (x,y) \blue{{}\notin{}} M \}\\
+              & {} \cup \{ (s, \alert{x_B}) \, | \, x \text{ is exposed} \}
+              \cup \{ (\blue{x_A}, t) \, | \, x \text{ is exposed} \}
+    \end{split}
+     \]
+  \end{itemize}
+  \vspace{-3ex}
+  \begin{center}
+    \input{pgf/general.reach.tex}
+  \end{center}
+\end{frame}
+
+\begin{frame} \frametitle{The Reachability Problem in General Graphs}
+  \framesubtitle{Strongly Simple Paths}
+  A path $P$ in $G'$ is strongly simple if:
+  \begin{itemize}
+  \item $P$ is simple.
+  \item $v_A \in P \Rightarrow v_B \notin P$.
+  \end{itemize}
+  \begin{block}{Theorem}
+    There is an augmenting path in $G$ if and only if there is a
+    strongly simple path from $s$ to $t$ in $G'$.
+  \end{block}
+  \vspace{-2ex}
+  \begin{center}
+    \input{pgf/general.reach.path.tex}
+  \end{center}
+\end{frame}
+
+\begin{frame} \frametitle{Solving the Reachability Problem}
+  \textbf{Solution:} A strongly simple path from $s$ to $t$ in $G'$:
+  \begin{itemize}
+  \item Depth-First Search (DFS) for $t$ starting at $s$.
+  \item DFS finds simple paths.
+  \item We need to find strongly simple paths only.
+  \item We use a Modified Depth-First Search (MDFS) algorithm.
+  \end{itemize}
+
+  \vspace{1ex}
+  \textbf{Example:}
+  \vspace{-1ex}
+  \begin{center}
+    \input{pgf/general.reach.path.2.tex}
+  \end{center}
+\end{frame}
+
+\subsection{The Algorithm}
+
+\begin{frame} \frametitle{Data Structures}
+  \begin{itemize}
+  \item Stack $K$
+    \begin{itemize}
+    \item[\subbullet] \textrm{TOP($K$)}: the last vertex added to the stack $K$.
+    \item[\subbullet] Vertices in $K$ form the current path.
+    \item[\subbullet] In each step, the MDFS algorithm considers an
+      edge \textrm{(TOP($K$), $v$)}, $v \in V'$.
+    \end{itemize}
+    \vspace{3ex}
+  \item List $L(v_A)$
+    \begin{itemize}
+    \item[\subbullet] To get a strongly simple path, $v_A$ and $v_B$
+      cannot be in $K$ simultaneously (we may ignore a vertex,
+      \emph{temporarily}).
+    \item[\subbullet] List $L(v_A)$ keeps track of such vertices.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{Hopcroft and Karp Algorithm for Bipartite
+    Graphs (1973)}
+  \vspace{-2ex}
+  \begin{enumerate}[\footnotesize Step 1:]
+  \item $M \leftarrow \phi$
+  \item Let $l(M)$ be the length of a shortest augmenting path of
+    $M$\\
+    Find a maximal set of paths $\{Q_1, Q_2, \ldots, Q_t\}$ such that:
+    \begin{enumerate}[2.1]
+    \item For each $i$, $Q_i$ is an augmenting path of $M$, $|Q_i| =
+      l(M)$,\\
+      $Q_i$ are vertex-disjoint.
+    \item Halt if no such paths exists.
+    \end{enumerate}
+  \item $M \leftarrow M \oplus Q_1 \oplus Q_2 \oplus \cdots \oplus
+    Q_t$; Go to 1.
+  \end{enumerate}
+  \begin{block}{Hopcroft and Karp Theorem}
+    If the cardinality of a maximum matching is $s$, then this
+    algorithm constructs a maximum matching within $2 \lfloor\sqrt{s}\rfloor
+    + 2$ executions of Step 2.
+  \end{block}
+  \vspace{-1ex}
+  \begin{center}
+    Step 2 complexity: $O(m) \Rightarrow$ Overall complexity:
+    $O(\sqrt{n} m)$
+  \end{center}
+\end{frame}
+
+\begin{frame} \frametitle{An $O(\sqrt{n} m)$ Algorithm for General
+    Graphs}
+  \begin{itemize}
+  \item Blum describes an $O(m)$ implementation of Step 2 for general
+    graphs, using a Modified Breadth-First Search (MBFS).
+
+  \item Blum's Step 2 Algorithm:
+    \begin{enumerate}[\footnotesize Step 1:]
+    \item Using MBFS, compute $\overline{G'}$
+    \item Using MDFS, compute a maximal set of strongly simple paths
+      from $s$ to $t$ in $\overline{G'}$.
+    \end{enumerate}
+  \end{itemize}
+  \begin{block}{Blum's Theorm}
+    A maximum matching in a general graph can be found in time
+    $O(\sqrt{n} m)$ and space $O(m+n)$.
+  \end{block}
+\end{frame}
+
+% =============================================================================
+
+\section{Conclusion}
+
+\subsection{Summary}
+
+\begin{frame} \frametitle{Summary}
+  \begin{tikzpicture}[xscale=.4,every
+    label/.style={scale=.7},>=stealth, on grid]
+    \tikzstyle{node}=[circle, fill=blue!50, inner sep=2pt]
+    \tikzstyle{aname}=[rotate=-45,scale=.7,anchor=north
+    west]
+
+    \node[node, label=above:1965] at (65,0) (ed) {};
+    \draw[->] (ed) -- (92,0);
+    \node[aname] at (ed) {Edmonds};
+    \node[above=4ex,scale=.8] at (ed) {$O(n^4)$};
+
+    \node[node, label=above:1976] at (76,0)
+    (impl) {};
+    \node[aname] at (impl) {Gabow's Implementation};
+    \node[above=4ex,scale=.8] at (impl) {$O(n^3)$};
+
+    \node[node, label=above:1980] at
+    (80,0) (vaz) {};
+    \node[aname] at (vaz) {Micali \& Vazirani};
+    \node[above=4ex,scale=.8] at (vaz) {$O(n^{2.5})$};
+
+    \node[node,label=above left:1989] at (89,0)
+    (vazprf) {};
+    \node[aname] at (vazprf) {Vazirani's Proof};
+
+    \node[node, label=above:1990] at (90,0) (blum)
+    {};
+    \node[aname] at (blum) {Blum};
+    \node[above=4ex,scale=.8,] at (blum) {$O(n^{2.5})$};
+
+    \node[node, label=above right:1991] at (91,0) (gabow)
+    {};
+    \node[aname] at (gabow) {Gabow};
+    \node[above=4ex,scale=.8,yshift=4ex] at (gabow) {$O(n^{2.5})$};
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame} \frametitle{References}
+
+  \begin{thebibliography}{1}
+%      \bibitem{netflow00}
+%    Rudolf Ahlswede, Ning Cai, Shuo-Yen~Robert Li, and
+%    Raymond~W. Yeung.
+    \bibitem{}
+    Jack Edmonds
+    \newblock Paths, {T}rees, and {F}lowers
+    {\scriptsize \newblock {\em Canadian Journal of Mathematics},
+      17:449--467, 1965.
+      \url{http://www.cs.berkeley.edu/~christos/classics/edmonds.ps}}
+
+    \bibitem{}
+      Harold N. Gabow
+      \newblock An {E}fficient {I}mplementation of {E}dmonds'
+      {A}lgorithm for {M}aximum {M}atching on {G}raphs
+      {\scriptsize \newblock {\em Journal of the ACM (JACM)},
+      23(2):221--234, 1976.}
+      
+    \bibitem{}
+      Norbert Blum
+      \newblock A {N}ew {A}pproach to {M}aximum {M}atching in
+      {G}eneral {G}raphs
+      {\scriptsize \newblock {\em Lecture Notes in Computer Science:
+          Automata, Languages and Programming},
+        443::586--597, Springer Berlin / Heidelberg, 1990.}
+  \end{thebibliography}
+%   Combinatorial Optimization: Algorithms and Complexity
+% By Christos H. Papadimitriou, Kenneth Steiglitz
+% Contributor Kenneth Steiglitz
+% Published by Courier Dover Publications, 1998
+% ISBN 0486402584, 9780486402581
+% 512 pages
+\end{frame}
+
+\begin{frame} \frametitle{Thank You}
+  \begin{center}
+    \Huge\bf\color{blue}
+    Thank You!
+  \end{center}
+\end{frame}
+
+\subsection{Questions}
+
+\begin{frame} \frametitle{Questions}
+  \begin{center}
+    \Huge\bf\color{blue}
+    {???}
+  \end{center}
+\end{frame}
+
+\end{document}

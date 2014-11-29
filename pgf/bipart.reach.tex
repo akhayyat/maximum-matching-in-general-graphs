@@ -1,0 +1,23 @@
+\begin{tikzpicture}[>=stealth, on grid, node distance=1.5cm]
+  \node[node] (a1) {$A_1$};
+  \node[node, below=of a1] (a2) {$A_2$};
+  \node[node2, right=of a1] (b1) {$B_1$};
+  \node[node2, below=of b1] (b2) {$B_2$};
+  \draw[match] (a1) -- (b1);
+  \draw (a1) -- (b2) -- (a2);
+  \draw (b2) node[xshift=1.2cm,yshift=.75cm] {$\Longrightarrow$};
+
+  \node[node, right=of b1, xshift=2.5cm] (a1-2) {$A_1$};
+  \node[node, below=of a1-2] (a2-2) {$A_2$};
+  \node[node2, right=of a1-2] (b1-2) {$B_1$};
+  \node[node2, below=of b1-2] (b2-2) {$B_2$};
+  \draw (a2-2) node[node, xshift=-1.5cm,yshift=.75cm,fill=white]
+  (t) {$t$};
+  \draw (b2-2) node[node, xshift=1.5cm,yshift=.75cm,fill=white]
+  (s) {$s$};
+  \draw[->] (a1-2) -- (b1-2);
+  \draw[<-] (a1-2) -- (b2-2);
+  \draw[<-] (a2-2) -- (b2-2);
+  \draw[->] (s) -- (b2-2);
+  \draw[->] (a2-2) -- (t);
+\end{tikzpicture}

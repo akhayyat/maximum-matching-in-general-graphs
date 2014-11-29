@@ -1,0 +1,25 @@
+\begin{tikzpicture}[>=stealth, node distance=1.4cm, on grid]
+%  \tikzstyle{node}+=[scale=.8]
+
+  \node[node] (1) {$1$};
+  \node[node, right=of 1] (2) {$2$};
+  \node[node, very thick, right=of 2] (3) {$3$};
+  \draw (3) ++(30:1.4cm) node[node] (4) {$4$};
+  \node[node, below=of 4] (5) {$5$};
+  \node[node, right=of 4] (6) {$6$};
+
+  \draw (1) -- (2) (4) -- (6);
+  \draw[very thick] (3) -- (4) (3) -- (5);
+  \draw[match] (2) -- (3) (4) -- (5);
+
+  \draw[path,red!60] (1.20) -- (2.160);
+  \draw[path,red!60] (2.25) -- (3.155);
+  \draw[path,red!60] (3.50) -- (4.190);
+  \draw[path,red!60] (4.-70) -- (5.70);
+
+  \draw[path] (1.-20) -- (2.-160);
+  \draw[path] (2.-25) -- (3.-155);
+  \draw[path] (3.-50) -- (5.170);
+  \draw[path] (5.120) -- (4.-120);
+  \draw[path] (4.20) -- (6.160);
+\end{tikzpicture}

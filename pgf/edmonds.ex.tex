@@ -1,0 +1,156 @@
+\begin{tikzpicture}[>=stealth, node distance=1.4cm, on grid]
+  \tikzstyle{lbl}=[scale=.7, anchor=south]
+
+%%%%%%%%%%%%%%%% Nodes %%%%%%%%%%%%%%%%
+
+  \node[node, double] (1) {$1$};
+  \node[node, right=of 1] (2) {$2$};
+  \node[node, right=of 2] (3) {$3$};
+  \node[node, right=of 3] (4) {$4$};
+  \node[node, below=of 2] (10) {$10$};
+  \uncover<1-4,7->{
+    \node[node, right=of 10] (9) {$9$};
+    \node[node, below=of 9] (8) {$8$};
+  }
+  \uncover<1-2,8>{
+    \node[node, right=of 9] (5) {$5$};
+    \node[node, right=of 5] (6) {$6$};
+    \node[node, right=of 8] (7) {$7$};
+  }
+  \uncover<3-4,7>{
+    \node[node, very thick, right=of 9] (b1) {$B_1$};
+  }
+  \uncover<5-6>{
+    \node[node, very thick, right=of 10] (b2) {$B_2$};
+  }
+
+%%%%%%%%%%%%%%%% Edges %%%%%%%%%%%%%%%%
+
+  \uncover<1-5>{
+    \draw (1) -- (2) (3) -- (4) (10) -- (2);
+    \draw[match] (2) -- (3);
+  }
+
+  \uncover<1>{
+    \draw[match] (6) -- (7);
+    \draw (6) -- (5) -- (7);
+  }
+
+  \uncover<1-2>{
+    \draw[match] (4) -- (5);
+    \draw (5) -- (9) (7) -- (8);
+  }
+
+  \uncover<1-3>{
+    \draw[match] (8) -- (9);
+  }
+
+  \uncover<1-4>{
+    \draw (9) -- (10);
+  }
+
+  \uncover<2>{
+    \draw[match, very thick] (6) -- (7);
+    \draw[very thick] (6) -- (5) -- (7);
+  }
+
+  \uncover<3-4>{
+    \draw[match] (4) -- (b1);
+  }
+
+  \uncover<3,7>{
+    \draw (9) -- (b1) -- (8);
+  }
+
+  \uncover<4>{
+    \draw[match, very thick] (8) -- (9);
+    \draw[very thick] (9) -- (b1) -- (8);
+  }
+
+  \uncover<5>{
+    \draw[match] (4) -- (b2);
+    \draw (b2) -- (10);
+  }
+
+  \uncover<6>{
+    \draw[match] (10) -- (b2);
+    \draw (4) -- (b2);
+  }
+
+  \uncover<6->{
+    \draw[match] (1) -- (2) (3) -- (4);
+    \draw (2) -- (3) (10) -- (2);
+  }
+
+  \uncover<7>{
+    \draw (4) -- (b1);
+  }
+
+  \uncover<7->{
+    \draw[match] (9) -- (10);
+    \draw (8) -- (9);
+  }
+
+  \uncover<8>{
+    \draw[match] (5) -- (6) (7) -- (8);
+    \draw (6) -- (7) -- (5) -- (9) (4) -- (5);
+  }
+
+%%%%%%%%%%%%%%%% Paths %%%%%%%%%%%%%%%%
+
+  \uncover<2-5>{
+    \draw[path] (1.20) -- (2.160);
+    \draw[path] (2.20) -- (3.160);
+    \draw[path] (3.20) -- (4.160);
+  }
+
+  \uncover<2>{
+    \draw[path] (4.-70) -- (5.70);
+    \draw[path] (5.20) -- (6.160);
+    \draw[path] (6.-105) -- (7.15);
+  }
+
+  \uncover<3-4>{
+    \draw[path] (4.-70) -- (b1.73);
+  }
+
+  \uncover<4>{
+    \draw[path] (b1.-115) -- (8.25);
+    \draw[path] (8.112) -- (9.-112);
+  }
+
+  \uncover<5>{
+    \draw[path] (4.-115) -- (b2.25);
+    \draw[path] (b2.-160) -- (10.-20);
+  }
+
+%%%%%%%%%%%%%%%% Labels %%%%%%%%%%%%%%%%
+
+  \uncover<2-5>{
+    \node[lbl] at (1.north) {$O$};
+    \node[lbl] at (2.north) {$I$};
+    \node[lbl] at (3.north) {$O$};
+    \node[lbl] at (4.north) {$I$};
+  }
+
+  \uncover<2>{
+    \node[lbl,red,anchor=south west, inner sep=2pt] at (5.north east) {$O$};
+    \node[lbl,anchor=west] at (6.east) {$I$};
+    \node[lbl,red,anchor=north] at (7.south) {$O$};
+  }
+
+  \uncover<3>{
+    \node[lbl,anchor=north] at (b1.south) {$O$};
+  }
+
+  \uncover<4>{
+    \node[lbl,anchor=north,red] at (b1.south) {$O$};
+    \node[lbl,anchor=north] at (8.south) {$I$};
+    \node[lbl,anchor=south,red] at (9.north) {$O$};
+  }
+
+  \uncover<5>{
+    \node[lbl,anchor=north] at (b2.south) {$O$};
+    \node[lbl,anchor=north] at (10.south) {$I$};
+  }
+\end{tikzpicture}

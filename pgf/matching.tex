@@ -1,0 +1,33 @@
+\begin{tikzpicture}[>=stealth, node distance=1cm, on grid]
+  \tikzstyle{node}=[circle, fill=blue!50, inner sep=2pt]
+
+  \node[node] (1) {};
+  \node[node, below=of 1] (2) {};
+  \node[node, below left=of 2] (3) {};
+  \node[node, below right=of 2] (4) {};
+
+  \draw (1) -- (2) -- (3) -- (4) -- (2);
+
+
+  \node[node, right=3cm] at (1) (2-1) {};
+  \node[node, below=of 2-1] (2-2) {};
+  \node[node, below left=of 2-2] (2-3) {};
+  \node[node, below right=of 2-2] (2-4) {};
+
+  \draw (2-1) -- (2-2) -- (2-4) -- (2-3);
+  \draw[match] (2-2) -- node[inner sep=1pt] (mid) {} (2-3);
+
+  \node[above left=of 2-2,yshift=-.2cm] (m) {$M$};
+  \draw (m) to[->, bend right] (mid);
+
+
+  \node[node, right=3cm] at (2-1) (3-1) {};
+  \node[node, below=of 3-1] (3-2) {};
+  \node[node, below left=of 3-2] (3-3) {};
+  \node[node, below right=of 3-2] (3-4) {};
+
+  \draw (3-2) -- (3-3);
+  \draw (3-2) -- (3-4);
+  \draw[match] (3-1) -- (3-2);
+  \draw[match] (3-3) -- (3-4);
+\end{tikzpicture}
